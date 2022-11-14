@@ -1,0 +1,70 @@
+{% extends 'index.html' %}
+{% block title %}Henrocks Blog{% endblock %}
+{% block conteiner %}
+    <!-- Page Header-->
+    <header class="masthead" style="background-image: url('static/assets/img/home-bg.jpg')">
+        <div class="container position-relative px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                    <div class="site-heading">
+                        <h1>Henrocks Blog</h1>
+                        <span class="subheading">Um pequeno blog feito utilizando django 4.1.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content-->
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
+                {% for post in page.object_list %}
+                    <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="{% url 'post' post.id %}">
+                            <h2 class="post-title">{{ post.title }}</h2>
+                            <h3 class="post-subtitle">{{ post.subtitle }}</h3>
+                        </a>
+                        <p class="post-meta">
+                            Postado por
+                            <a href="#!">{{ post.author }}</a>
+                            em {{ post.published_date }}
+                        </p>
+                    </div>
+                    <!-- Divider-->
+                    <hr class="my-4" />
+                {% endfor %}
+                
+                <!-- Pagination -->
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center pagination-lg">
+                        {% if page.has_previous %}
+                            <a class="page-link" href="{% url 'home' %}?page={{ page.previous_page_number }}" tabindex="-1" aria-disabled="true">Previous</a>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                            </li>
+                        {% endif %}
+
+                        {% for pages in page.paginator.page_range %}
+                            {% if pages == page.number %}
+                                <li class="page-item active"><a class="page-link" href="#">{{ pages }}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="{% url 'home' %}?page={{ pages }}">{{ pages }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if page.has_next %}
+                            <a class="page-link" href="{% url 'home' %}?page={{ page.next_page_number }}">Next</a>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#">Next</a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
